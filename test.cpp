@@ -1,6 +1,3 @@
-﻿// threadpool_final.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-
 #include <iostream>
 #include<functional>
 #include<thread>
@@ -10,15 +7,6 @@
 
 using namespace std;
 
-
-/*
-如何让线程池提交任务更方便
-pool.submitTask(func，arg..)
-1、submitTask：可变参模板编程
-
-2、Result复杂
-	c++11  packaged_task(function函数对象)  async 
-*/
 int func_1(int n)
 {
 	this_thread::sleep_for(chrono::seconds(2));
@@ -35,24 +23,18 @@ int func_2(int a, int b)
 	}	
 	return t ;
 }
+
 int main()
 {
-	ThreadPool pool;
-	pool.setMode(PoolMode::MODE_CACHED);
-	pool.start(2);
+	ThreadPool pool;         //creat threadpool
+	pool.setMode(PoolMode::MODE_CACHED); //set cached mode
+	pool.start(2);          //start threadpool
 
-	future<int> r1 = pool.submitTask(func_1,100);
-	future<int> r2 = pool.submitTask(func_2,1000,2000);
+	future<int> r1 = pool.submitTask(func_1,100);      //Submit task 1 for execution; r1 will receive the result.
+	future<int> r2 = pool.submitTask(func_2,1000,2000);	//Submit task 2 for execution; r2 will receive the result.
 
-	cout << r1.get() << endl;
-	cout << r2.get() << endl;
-	//packaged_task<int(int,int)> task(sum1);
-	//future<int> res = task.get_future();
-	////task(10, 20);
+	cout << r1.get() << endl;   //output the result r1
+	cout << r2.get() << endl;   //output the result r2
 
-	//thread t(task, 10, 20);
-	//t.detach();
-
-	//cout << res.get()<<endl;
-
+	return 0;
 }
